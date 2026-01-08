@@ -134,6 +134,15 @@ document.addEventListener('mousedown', function(e) {
         floating.remove();
     }, 800);
 });
+    
 
+let ameliorationClick = document.querySelector('#Al1');
+let affichage_coutAl1 = document.querySelector('#IDCoutAl1');
+let coutAl1 = 200;
 
-if affichage_CPS 
+ameliorationClick.addEventListener('click', function() {
+    if (money >= coutAl1) {
+        money = money - coutAl1;
+        clicksouris = clicksouris * 2;
+        }
+    });
