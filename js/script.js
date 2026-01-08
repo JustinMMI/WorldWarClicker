@@ -1,5 +1,5 @@
 // création de variable
-let click = 1;
+let click = 0;
 let clicksouris = 1;
 let money = 0;
 
@@ -134,3 +134,6 @@ document.addEventListener('mousedown', function(e) {
         floating.remove();
     }, 800);
 });
+
+
+if affichage_CPS 
