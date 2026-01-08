@@ -71,6 +71,7 @@ const ameliorations = [
 function clicking() {
     money = money + clicksouris;
     affichage_money.textContent = money;
+    saveGame();
 }
 
 // Fonction générique pour acheter une amélioration
@@ -86,6 +87,7 @@ function acheterAmelioration(amelio) {
         if (amelio.affichage_nombre) amelio.affichage_nombre.textContent = amelio.nombre;
         if (amelio.affichage_cps) amelio.affichage_cps.textContent = (amelio.nombre * amelio.gain);
         if (amelio.affichage_gain) amelio.affichage_gain.textContent = amelio.gain;
+        saveGame();
     }
 } 
 
@@ -93,6 +95,67 @@ function acheterAmelioration(amelio) {
 ameliorations.forEach(amelio => {
     amelio.bouton.addEventListener('click', () => acheterAmelioration(amelio));
 });
+
+// ====== Sauvegarde/Chargement (localStorage) ======
+const STORAGE_KEY = 'wwc-save-v1';
+
+function mettreAJourUIAmeliorations() {
+    ameliorations.forEach(a => {
+        if (a.affichage_cout) a.affichage_cout.textContent = a.cout;
+        if (a.affichage_nombre) a.affichage_nombre.textContent = a.nombre;
+        if (a.affichage_cps) a.affichage_cps.textContent = (a.nombre * a.gain);
+        if (a.affichage_gain) a.affichage_gain.textContent = a.gain;
+    });
+}
+
+function saveGame() {
+    try {
+        const data = {
+            money,
+            click,
+            clicksouris,
+            ameliorations: ameliorations.map(a => ({ id: a.id, nombre: a.nombre, cout: a.cout }))
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+        console.warn('Sauvegarde échouée:', e);
+    }
+}
+
+function loadGame() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+            mettreAJourUIAmeliorations();
+            return;
+        }
+        const data = JSON.parse(raw);
+        if (typeof data.money === 'number') money = data.money;
+        if (typeof data.click === 'number') click = data.click;
+        if (typeof data.clicksouris === 'number') clicksouris = data.clicksouris;
+        if (Array.isArray(data.ameliorations)) {
+            data.ameliorations.forEach(s => {
+                const a = ameliorations.find(x => x.id === s.id);
+                if (a) {
+                    if (typeof s.nombre === 'number') a.nombre = s.nombre;
+                    if (typeof s.cout === 'number') a.cout = s.cout;
+                }
+            });
+        }
+        affichage_money.textContent = money;
+        mettreAJourUIAmeliorations();
+    } catch (e) {
+        console.warn('Chargement échoué:', e);
+        mettreAJourUIAmeliorations();
+    }
+}
+
+// Charger l'état sauvegardé au démarrage
+loadGame();
+
+// Sauvegarde régulière et avant fermeture
+setInterval(saveGame, 5000);
+window.addEventListener('beforeunload', saveGame);
 
 let affichage_CPS = document.querySelector('#CPST');
 
@@ -102,12 +165,7 @@ setInterval(() => {
 }, 1000);
 
 // Initialisation des affichages des améliorations (cout, nombre, cps, gain)
-ameliorations.forEach(a => {
-    if (a.affichage_cout) a.affichage_cout.textContent = a.cout;
-    if (a.affichage_nombre) a.affichage_nombre.textContent = a.nombre;
-    if (a.affichage_cps) a.affichage_cps.textContent = (a.nombre * a.gain);
-    if (a.affichage_gain) a.affichage_gain.textContent = a.gain;
-});
+mettreAJourUIAmeliorations();
 
 // On récupère tes variables existantes
 // let clicksouris = 1; 
