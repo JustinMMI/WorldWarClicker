@@ -1,5 +1,6 @@
 // création de variable
 let click = 1;
+let clicksouris = 1;
 let money = 0;
 
 // lien entre html et js
@@ -34,8 +35,8 @@ const ameliorations = [
     {
         id: 2,
         nombre: 0,
-        cout: 1000,
-        gain: 10,
+        cout: 500,
+        gain: 3,
         bouton: document.querySelector("#a2"),
         affichage_cout: document.querySelector('#IDCoutA2'),
         affichage_nombre: document.querySelector('#IDNombreA2'),
@@ -45,8 +46,8 @@ const ameliorations = [
     {
         id: 3,
         nombre: 0,
-        cout: 10000,
-        gain: 100,
+        cout: 2000,
+        gain: 10,
         bouton: document.querySelector("#a3"),
         affichage_cout: document.querySelector('#IDCoutA3'),
         affichage_nombre: document.querySelector('#IDNombreA3'),
@@ -56,8 +57,8 @@ const ameliorations = [
     {
         id: 4,
         nombre: 0,
-        cout: 100000,
-        gain: 1000,
+        cout: 15000,
+        gain: 35,
         bouton: document.querySelector("#a4"),
         affichage_cout: document.querySelector('#IDCoutA4'),
         affichage_nombre: document.querySelector('#IDNombreA4'),
@@ -68,7 +69,7 @@ const ameliorations = [
 
 // Quand on click sur le clicker, on gagne le nombre de click en money
 function clicking() {
-    money = money + click;
+    money = money + clicksouris;
     affichage_money.textContent = money;
 }
 
@@ -77,7 +78,7 @@ function acheterAmelioration(amelio) {
     if (money >= amelio.cout) {
         money -= amelio.cout;
         click += amelio.gain;
-        amelio.cout = Math.ceil(amelio.cout * 1.5);
+        amelio.cout = Math.ceil(amelio.cout * 1.2);
         amelio.nombre++;
         
         affichage_money.textContent = money;
@@ -108,4 +109,28 @@ ameliorations.forEach(a => {
     if (a.affichage_gain) a.affichage_gain.textContent = a.gain;
 });
 
+// On récupère tes variables existantes
+// let clicksouris = 1; 
 
+document.addEventListener('mousedown', function(e) {
+    // 1. Création de l'élément span
+    const floating = document.createElement('span');
+    
+    // 2. Contenu du texte (+ suivi de ta variable)
+    floating.innerText = `+${clicksouris}`;
+    
+    // 3. Style et positionnement
+    floating.classList.add('floating-text');
+    
+    // On centre le texte sur la souris (ajuste le -10 selon la taille de ta police)
+    floating.style.left = `${e.pageX - 10}px`;
+    floating.style.top = `${e.pageY - 20}px`;
+
+    // 4. Ajout au document
+    document.body.appendChild(floating);
+
+    // 5. Suppression de l'élément après l'animation (0.8s = 800ms)
+    setTimeout(() => {
+        floating.remove();
+    }, 800);
+});

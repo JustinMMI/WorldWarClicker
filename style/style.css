@@ -159,3 +159,25 @@ p span {
 .buttons-container button {
   flex: 1;
 }
+
+.floating-text {
+    position: absolute;
+    pointer-events: none; /* Pour que le texte ne gêne pas les futurs clics */
+    color: #000000; /* Choisis ta couleur */
+    font-weight: bold;
+    font-family: sans-serif;
+    animation: floatUp 0.8s ease-out forwards;
+    z-index: 1000;
+    font-size: 24px;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-50px); /* Monte de 50px */
+        opacity: 0; /* Devient invisible */
+    }
+}
