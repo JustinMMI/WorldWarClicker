@@ -193,3 +193,15 @@ document.addEventListener('mousedown', function(e) {
     }, 800);
 });
 
+let ameliorationClick = document.querySelector('#Al1');
+let affichage_cout_Al1 = document.querySelector('#IDCoutAl1');
+let cout_Al1 = 200;
+
+ameliorationClick.addEventListener('click', () => {
+    if (money >= cout_Al1) {
+        money = money - cout_Al1;
+        clicksouris = clicksouris * 2;
+        cout_Al1 = cout_Al1 * 100;
+        affichage_cout_Al1.textContent = cout_Al1;
+    }
+});
