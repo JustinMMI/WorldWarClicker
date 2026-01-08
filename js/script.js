@@ -135,5 +135,3 @@ document.addEventListener('mousedown', function(e) {
     }, 800);
 });
 
-
-if affichage_CPS 
