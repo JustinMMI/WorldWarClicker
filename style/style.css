@@ -121,18 +121,18 @@ button {
   transform: translateY(0);
 }
 
-#a1, #a2 {
+#a1, #a2, #a3, #a4 {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   flex: 1;
   width: 100%;
 }
 
-#a1:hover, #a2:hover {
+#a1:hover, #a2:hover, #a3:hover, #a4:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
 }
 
-#a1:disabled, #a2:disabled {
+#a1:disabled, #a2:disabled, #a3:disabled, #a4:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
