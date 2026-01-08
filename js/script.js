@@ -19,13 +19,15 @@ setInterval(() => {
     });
 }, 1000);
 
+let gaina1 = 1;
+
 // Configuration des améliorations
 const ameliorations = [
     {
         id: 1,
         nombre: 0,
         cout: 100,
-        gain: 1,
+        gain: gaina1,
         bouton: document.querySelector("#a1"),
         affichage_cout: document.querySelector('#IDCoutA1'),
         affichage_nombre: document.querySelector('#IDNombreA1'),
@@ -114,7 +116,7 @@ function saveGame() {
             money,
             click,
             clicksouris,
-            ameliorations: ameliorations.map(a => ({ id: a.id, nombre: a.nombre, cout: a.cout }))
+            ameliorations: ameliorations.map(a => ({ id: a.id, nombre: a.nombre, cout: a.cout, gain: a.gain }))
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
@@ -127,6 +129,7 @@ function loadGame() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
             mettreAJourUIAmeliorations();
+            click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
             return;
         }
         const data = JSON.parse(raw);
@@ -139,11 +142,14 @@ function loadGame() {
                 if (a) {
                     if (typeof s.nombre === 'number') a.nombre = s.nombre;
                     if (typeof s.cout === 'number') a.cout = s.cout;
+                    if (typeof s.gain === 'number') a.gain = s.gain;
+                    if (a.id === 1) gaina1 = a.gain;
                 }
             });
         }
         affichage_money.textContent = money;
         mettreAJourUIAmeliorations();
+        click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
     } catch (e) {
         console.warn('Chargement échoué:', e);
         mettreAJourUIAmeliorations();
@@ -205,3 +211,22 @@ ameliorationClick.addEventListener('click', () => {
         affichage_cout_Al1.textContent = cout_Al1;
     }
 });
+
+let ameliorationMamie = document.querySelector('#Al2');
+let affichage_cout_Al2 = document.querySelector('#IDCoutAl2');
+let cout_Al2 = 2000;
+
+ameliorationMamie.addEventListener('click', () => {
+    if (money >= cout_Al2) {
+        money = money - cout_Al2;
+        cout_Al2 = cout_Al2 * 100;
+        gaina1 = gaina1 * 2;
+        // Mettre à jour le gain utilisé par l'amélioration A1, recalculer le CPS, rafraîchir l'UI et sauvegarder
+        ameliorations[0].gain = gaina1;
+        click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+        mettreAJourUIAmeliorations();
+        saveGame();
+        affichage_cout_Al2.textContent = cout_Al2;
+    }
+});
+
