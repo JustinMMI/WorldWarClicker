@@ -30,7 +30,7 @@ function resetGame() {
     // Met à jour l'UI
     affichage_money.textContent = money;
     mettreAJourUIAmeliorations();
-        click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+    click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
     affichage_CPS.textContent = click;
     localStorage.removeItem(STORAGE_KEY);
 }
@@ -184,9 +184,9 @@ function loadGame() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
-            // Pas de sauvegarde : utiliser valeurs par défaut
-            mettreAJourUIAmeliorations();
-            click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+            // Première visite: initialiser l'état via reset puis sauvegarder
+            resetGame();
+            saveGame();
             return;
         }
         const data = JSON.parse(raw);
