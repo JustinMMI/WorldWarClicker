@@ -1,8 +1,16 @@
 // déclaration des variables globales
+<<<<<<< Updated upstream
 let click;
 let clicksouris;
 let money;
 let gaina1;
+=======
+let click = 0;
+let clicksouris = 1;
+let money = 0;
+let gaina1 = 1;
+let gaina2 = 3; // gain initial pour A2 (Papie)
+>>>>>>> Stashed changes
 
 // Base de données variables persistantes
 //
@@ -19,6 +27,10 @@ function resetGame() {
     affichage_cout_Al1.textContent = cout_Al1;
     cout_Al2 = 2000;
     affichage_cout_Al2.textContent = cout_Al2;
+    cout_Al3 = 20000;
+    // Mettre à jour l'affichage si l'élément est déjà présent
+    if (typeof affichage_cout_Al3 !== 'undefined' && affichage_cout_Al3) affichage_cout_Al3.textContent = cout_Al3;
+
 
     ameliorations.forEach(a => {
         if (a.id === 1) { a.nombre = 0; a.cout = 100; a.gain = gaina1; }
@@ -55,7 +67,7 @@ const ameliorations = [
         id: 2,
         nombre: 0,
         cout: 500,
-        gain: 3,
+        gain: gaina2,
         bouton: document.querySelector("#a2"),
         affichage_cout: document.querySelector('#IDCoutA2'),
         affichage_nombre: document.querySelector('#IDNombreA2'),
@@ -110,6 +122,7 @@ affichage_money.textContent = money;
 // Coûts des améliorations spéciales (persistés)
 let cout_Al1 = 200;
 let cout_Al2 = 2000;
+let cout_Al3 = 20000; // coût pour Papy (spécial qui affecte A2)
 
 // On crée une boucle qui tourne toutes les 1000ms
 setInterval(() => {
@@ -172,6 +185,7 @@ function saveGame() {
             clicksouris,
             cout_Al1,
             cout_Al2,
+            cout_Al3,
             ameliorations: ameliorations.map(a => ({ id: a.id, nombre: a.nombre, cout: a.cout, gain: a.gain }))
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -196,6 +210,7 @@ function loadGame() {
         // Restore special costs if present
         if (typeof data.cout_Al1 === 'number') cout_Al1 = data.cout_Al1;
         if (typeof data.cout_Al2 === 'number') cout_Al2 = data.cout_Al2;
+        if (typeof data.cout_Al3 === 'number') cout_Al3 = data.cout_Al3;
         if (Array.isArray(data.ameliorations)) {
             data.ameliorations.forEach(s => {
                 const a = ameliorations.find(x => x.id === s.id);
@@ -204,6 +219,7 @@ function loadGame() {
                     if (typeof s.cout === 'number') a.cout = s.cout;
                     if (typeof s.gain === 'number') a.gain = s.gain;
                     if (a.id === 1) gaina1 = a.gain;
+                    if (a.id === 2) gaina2 = a.gain;
                 }
             });
         }
@@ -296,6 +312,28 @@ ameliorationMamie.addEventListener('click', () => {
         click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
         mettreAJourUIAmeliorations();
         saveGame();
-        affichage_cout_Al2.textContent = cout_Al2;
+    affichage_cout_Al2.textContent = cout_Al2;
     }
 });
+
+// Nouvelle amélioration spéciale : Papy (affecte A2)
+let ameliorationPapy = document.querySelector('#Al3');
+let affichage_cout_Al3 = document.querySelector('#IDCoutAl3');
+if (affichage_cout_Al3) affichage_cout_Al3.textContent = cout_Al3;
+
+if (ameliorationPapy) {
+    ameliorationPapy.addEventListener('click', () => {
+        if (money >= cout_Al3) {
+            money = money - cout_Al3;
+            cout_Al3 = cout_Al3 * 100;
+            // Double le gain de l'amélioration A2 (Papie)
+            ameliorations[1].gain = Math.ceil(ameliorations[1].gain * 2);
+            gaina2 = ameliorations[1].gain;
+            // Recalculate CPS, update UI and save
+            click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+            mettreAJourUIAmeliorations();
+            saveGame();
+            if (affichage_cout_Al3) affichage_cout_Al3.textContent = cout_Al3;
+        }
+    });
+}
