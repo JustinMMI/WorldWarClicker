@@ -7,6 +7,10 @@ let money = 0;
 let affichage_money = document.querySelector('#money');
 affichage_money.textContent = money;
 
+// Coûts des améliorations spéciales (persistés)
+let cout_Al1 = 200;
+let cout_Al2 = 2000;
+
 // On crée une boucle qui tourne toutes les 1000ms
 setInterval(() => {
     money = money + click;
@@ -116,18 +120,21 @@ function saveGame() {
             money,
             click,
             clicksouris,
+            cout_Al1,
+            cout_Al2,
             ameliorations: ameliorations.map(a => ({ id: a.id, nombre: a.nombre, cout: a.cout, gain: a.gain }))
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
         console.warn('Sauvegarde échouée:', e);
     }
-}
+} 
 
 function loadGame() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
+            // Pas de sauvegarde : utiliser valeurs par défaut
             mettreAJourUIAmeliorations();
             click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
             return;
@@ -136,6 +143,9 @@ function loadGame() {
         if (typeof data.money === 'number') money = data.money;
         if (typeof data.click === 'number') click = data.click;
         if (typeof data.clicksouris === 'number') clicksouris = data.clicksouris;
+        // Restore special costs if present
+        if (typeof data.cout_Al1 === 'number') cout_Al1 = data.cout_Al1;
+        if (typeof data.cout_Al2 === 'number') cout_Al2 = data.cout_Al2;
         if (Array.isArray(data.ameliorations)) {
             data.ameliorations.forEach(s => {
                 const a = ameliorations.find(x => x.id === s.id);
@@ -154,7 +164,7 @@ function loadGame() {
         console.warn('Chargement échoué:', e);
         mettreAJourUIAmeliorations();
     }
-}
+} 
 
 // Charger l'état sauvegardé au démarrage
 loadGame();
@@ -176,32 +186,40 @@ mettreAJourUIAmeliorations();
 // On récupère tes variables existantes
 // let clicksouris = 1; 
 
-document.addEventListener('mousedown', function(e) {
-    // 1. Création de l'élément span
-    const floating = document.createElement('span');
-    
-    // 2. Contenu du texte (+ suivi de ta variable)
-    floating.innerText = `+${clicksouris}`;
-    
-    // 3. Style et positionnement
-    floating.classList.add('floating-text');
-    
-    // On centre le texte sur la souris (ajuste le -10 selon la taille de ta police)
-    floating.style.left = `${e.pageX - 10}px`;
-    floating.style.top = `${e.pageY - 20}px`;
+// Afficher le texte flottant seulement quand on clique sur le clicker (image)
+let clickerElement = document.querySelector('.cookie-image');
+if (clickerElement) {
+    clickerElement.addEventListener('mousedown', function(e) {
+        // 1. Création de l'élément span
+        const floating = document.createElement('span');
+        
+        // 2. Contenu du texte (+ suivi de ta variable)
+        floating.innerText = `+${clicksouris}`;
+        
+        // 3. Style et positionnement
+        floating.classList.add('floating-text');
+        
+        // On centre le texte sur la souris (ajuste le -10 selon la taille de ta police)
+        floating.style.left = `${e.pageX - 10}px`;
+        floating.style.top = `${e.pageY - 20}px`;
 
-    // 4. Ajout au document
-    document.body.appendChild(floating);
+        // 4. Ajout au document
+        document.body.appendChild(floating);
 
-    // 5. Suppression de l'élément après l'animation (0.8s = 800ms)
-    setTimeout(() => {
-        floating.remove();
-    }, 800);
-});
+        // 5. Suppression de l'élément après l'animation (0.8s = 800ms)
+        setTimeout(() => {
+            floating.remove();
+        }, 800);
+    });
+} else {
+    // Fallback: si l'image n'existe pas, on évite d'afficher partout
+    console.warn('Élément clicker non trouvé pour l’effet de texte flottant.');
+}
 
 let ameliorationClick = document.querySelector('#Al1');
 let affichage_cout_Al1 = document.querySelector('#IDCoutAl1');
-let cout_Al1 = 200;
+// Affiche la valeur restaurée (ou la valeur par défaut si pas de sauvegarde)
+affichage_cout_Al1.textContent = cout_Al1;
 
 ameliorationClick.addEventListener('click', () => {
     if (money >= cout_Al1) {
@@ -209,12 +227,14 @@ ameliorationClick.addEventListener('click', () => {
         clicksouris = clicksouris * 2;
         cout_Al1 = cout_Al1 * 100;
         affichage_cout_Al1.textContent = cout_Al1;
+        saveGame();
     }
 });
 
 let ameliorationMamie = document.querySelector('#Al2');
 let affichage_cout_Al2 = document.querySelector('#IDCoutAl2');
-let cout_Al2 = 2000;
+// Affiche la valeur restaurée (ou la valeur par défaut si pas de sauvegarde)
+affichage_cout_Al2.textContent = cout_Al2;
 
 ameliorationMamie.addEventListener('click', () => {
     if (money >= cout_Al2) {
