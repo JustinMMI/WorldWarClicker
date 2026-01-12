@@ -331,3 +331,50 @@ if (ameliorationPapy) {
         }
     });
 }
+
+// Rendre les tooltips des améliorations spéciales au-dessus de tout
+// en les détachant dans le <body> lors du survol / focus afin d'éviter qu'elles
+// soient coupées par le conteneur avec overflow.
+document.querySelectorAll('.special-upgrade').forEach(su => {
+    const tooltip = su.querySelector('.tooltip');
+    const btn = su.querySelector('.special-btn');
+    if (!tooltip) return;
+
+    // Sauvegarde du parent original pour restauration
+    const originalParent = tooltip.parentNode;
+    const originalNext = tooltip.nextSibling;
+
+    function showTooltip() {
+        const rect = su.getBoundingClientRect();
+        // Déplacer dans le body pour éviter le clipping
+        document.body.appendChild(tooltip);
+        tooltip.style.position = 'fixed';
+        tooltip.style.display = 'block';
+        tooltip.style.zIndex = '100000';
+        // Mesurer et positionner
+        const tw = tooltip.offsetWidth;
+        const th = tooltip.offsetHeight;
+        tooltip.style.left = (rect.left - tw - 12) + 'px';
+        tooltip.style.top = (rect.top + rect.height / 2 - th / 2) + 'px';
+    }
+
+    function hideTooltip() {
+        tooltip.style.display = 'none';
+        tooltip.style.position = '';
+        tooltip.style.left = '';
+        tooltip.style.top = '';
+        tooltip.style.zIndex = '';
+        // Restaurer dans le DOM original
+        if (originalParent) {
+            if (originalNext) originalParent.insertBefore(tooltip, originalNext);
+            else originalParent.appendChild(tooltip);
+        }
+    }
+
+    su.addEventListener('mouseenter', showTooltip);
+    su.addEventListener('mouseleave', hideTooltip);
+    if (btn) {
+        btn.addEventListener('focus', showTooltip);
+        btn.addEventListener('blur', hideTooltip);
+    }
+});
