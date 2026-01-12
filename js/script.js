@@ -1,9 +1,9 @@
 // déclaration des variables globales
-let click = 0;
-let clicksouris = 1;
-let money = 0;
-let gaina1 = 1;
-let gaina2 = 3; // gain initial pour A2 (Papie)
+let click;
+let clicksouris;
+let money;
+let gaina1;
+let gaina2;
 
 // Base de données variables persistantes
 //
@@ -15,6 +15,7 @@ function resetGame() {
     click = 0;
     clicksouris = 1;
     gaina1 = 1;
+    gaina2 = 3;
 
     cout_Al1 = 200;
     affichage_cout_Al1.textContent = cout_Al1;
