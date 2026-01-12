@@ -1,16 +1,9 @@
 // déclaration des variables globales
-<<<<<<< Updated upstream
-let click;
-let clicksouris;
-let money;
-let gaina1;
-=======
 let click = 0;
 let clicksouris = 1;
 let money = 0;
 let gaina1 = 1;
 let gaina2 = 3; // gain initial pour A2 (Papie)
->>>>>>> Stashed changes
 
 // Base de données variables persistantes
 //
