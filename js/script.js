@@ -1,30 +1,43 @@
-// création de variable
+// déclaration des variables globales
 let click = 0;
 let clicksouris = 1;
 let money = 0;
-
-// lien entre html et js
-let affichage_money = document.querySelector('#money');
-affichage_money.textContent = money;
-
-// Coûts des améliorations spéciales (persistés)
-let cout_Al1 = 200;
-let cout_Al2 = 2000;
-
-// On crée une boucle qui tourne toutes les 1000ms
-setInterval(() => {
-    money = money + click;
-    affichage_money.textContent = money;
-
-    // Met à jour les CPS et active/désactive les boutons d'amélioration
-    ameliorations.forEach(a => {
-        if (a.affichage_cps) a.affichage_cps.textContent = (a.nombre * a.gain);
-        if (a.bouton) a.bouton.disabled = money < a.cout;
-    });
-}, 1000);
-
 let gaina1 = 1;
 
+// Base de données variables persistantes
+//
+//
+
+function resetGame() {
+    // Variables
+    money = 0;
+    click = 0;
+    clicksouris = 1;
+    gaina1 = 1;
+
+    cout_Al1 = 200;
+    affichage_cout_Al1.textContent = cout_Al1;
+    cout_Al2 = 2000;
+    affichage_cout_Al2.textContent = cout_Al2;
+
+    ameliorations.forEach(a => {
+        if (a.id === 1) { a.nombre = 0; a.cout = 100; a.gain = gaina1; }
+        else if (a.id === 2) { a.nombre = 0; a.cout = 500; a.gain = 3; }
+        else if (a.id === 3) { a.nombre = 0; a.cout = 2000; a.gain = 10; }
+        else if (a.id === 4) { a.nombre = 0; a.cout = 15000; a.gain = 35; }
+    });
+
+    // Met à jour l'UI
+    affichage_money.textContent = money;
+    mettreAJourUIAmeliorations();
+        click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+    affichage_CPS.textContent = click;
+    localStorage.removeItem(STORAGE_KEY);
+}
+
+//
+//
+//
 // Configuration des améliorations
 const ameliorations = [
     {
@@ -72,6 +85,43 @@ const ameliorations = [
         affichage_gain: document.querySelector('#A4gain')
     }
 ];
+
+
+
+
+
+
+let resetButton = document.querySelector('#Reset');
+
+resetButton.addEventListener('click', () => {
+    if (!confirm('Voulez-vous vraiment réinitialiser la partie ?')) return;
+    resetGame();
+    saveGame();
+});
+
+//
+//
+//
+
+// lien entre html et js
+let affichage_money = document.querySelector('#money');
+affichage_money.textContent = money;
+
+// Coûts des améliorations spéciales (persistés)
+let cout_Al1 = 200;
+let cout_Al2 = 2000;
+
+// On crée une boucle qui tourne toutes les 1000ms
+setInterval(() => {
+    money = money + click;
+    affichage_money.textContent = money;
+
+    // Met à jour les CPS et active/désactive les boutons d'amélioration
+    ameliorations.forEach(a => {
+        if (a.affichage_cps) a.affichage_cps.textContent = (a.nombre * a.gain);
+        if (a.bouton) a.bouton.disabled = money < a.cout;
+    });
+}, 1000);
 
 // Quand on click sur le clicker, on gagne le nombre de click en money
 function clicking() {
@@ -248,42 +298,4 @@ ameliorationMamie.addEventListener('click', () => {
         saveGame();
         affichage_cout_Al2.textContent = cout_Al2;
     }
-});
-
-let resetButton = document.querySelector('#Reset');
-
-resetButton.addEventListener('click', () => {
-    if (!confirm('Voulez-vous vraiment réinitialiser la partie ?')) return;
-
-    // Supprime la sauvegarde
-    localStorage.removeItem(STORAGE_KEY);
-
-    // Réinitialise les variables globales
-    money = 0;
-    click = 0;
-    clicksouris = 1;
-    gaina1 = 1;
-
-    // Réinitialise les améliorations aux valeurs par défaut
-    ameliorations.forEach(a => {
-        if (a.id === 1) { a.nombre = 0; a.cout = 100; a.gain = gaina1; }
-        else if (a.id === 2) { a.nombre = 0; a.cout = 500; a.gain = 3; }
-        else if (a.id === 3) { a.nombre = 0; a.cout = 2000; a.gain = 10; }
-        else if (a.id === 4) { a.nombre = 0; a.cout = 15000; a.gain = 35; }
-    });
-
-    // Réinitialise les améliorations spéciales
-    cout_Al1 = 200;
-    affichage_cout_Al1.textContent = cout_Al1;
-    cout_Al2 = 2000;
-    affichage_cout_Al2.textContent = cout_Al2;
-
-    // Met à jour l'UI
-    affichage_money.textContent = money;
-    mettreAJourUIAmeliorations();
-    click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
-    affichage_CPS.textContent = click;
-
-    // Sauvegarde l'état réinitialisé
-    saveGame();
 });
