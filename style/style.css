@@ -6,13 +6,13 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #071029 0%, #000000 100%); /* dark navy -> black */
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #333;
-}
+  color: #e6eef8; /* light text for dark background */
+} 
 
 h1#money {
   font-size: 3.5rem;
@@ -28,14 +28,14 @@ h1#money {
   flex-direction: row;
   align-items: center;
   gap: 40px;
-  background: rgba(255, 255, 255, 0.95);
+  background: transparent; /* removed white panel */
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   max-width: 900px;
   width: 100%;
   margin: 20px;
-}
+} 
 
 .game-section {
   display: flex;
@@ -47,11 +47,11 @@ h1#money {
 .upgrades-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px; /* moins d'espace vertical */
   flex: 1;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  padding: 20px;
-  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
+  padding: 16px;
+  border-radius: 12px;
   border-left: 3px solid #667eea;
 
   /* Fixe la section des améliorations sur la droite */
@@ -59,7 +59,7 @@ h1#money {
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
-  width: 300px;
+  width: 380px; /* largeur augmentée pour 2 colonnes */
   max-height: 80vh;
   overflow-y: auto;
   z-index: 50;
@@ -67,15 +67,16 @@ h1#money {
 
 /* Petite ajustement pour éviter que le container chevauche la sidebar */
 .container {
-  padding-right: 360px; /* laisse de la place pour la sidebar */
+  padding-right: 420px; /* laisse de la place pour la sidebar plus large */
 }
 
-/* Spécial : petites cases pour améliorations spéciales */
+/* Spécial : petites cases pour améliorations spéciales (alignées en haut à droite) */
 .special-upgrades {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-end;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .special-upgrade {
@@ -83,36 +84,36 @@ h1#money {
 }
 
 .special-btn {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-  color: #333;
-  font-weight: bold;
-  font-size: 1.2rem;
+  color: #111;
+  font-weight: 700;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(0,0,0,0.06);
+  border: none;
   cursor: pointer;
 }
 
 .special-btn:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* Tooltip visible au hover */
+/* Tooltip visible au hover (s'affiche à gauche du bouton) */
 .special-upgrade .tooltip {
   display: none;
   position: absolute;
-  right: 74px; /* s'affiche à gauche du petit carré */
+  right: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
   min-width: 220px;
   background: rgba(20,20,20,0.95);
   color: #fff;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 8px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.3);
   text-align: left;
@@ -128,10 +129,24 @@ h1#money {
   display: block;
   margin-bottom: 6px;
   color: #ffd700;
+} 
+
+/* Forcer le texte des paragraphes dans le tooltip en blanc pour lisibilité */
+.special-upgrade .tooltip p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 .reset-container {
   margin-top: 8px;
+}
+
+/* Grid pour les améliorations normales : deux colonnes pour réduire le scroll */
+.upgrades-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 /* Responsive: sur petits écrans, passer la sidebar en bas */
@@ -142,38 +157,87 @@ h1#money {
     width: 100%;
     max-height: none;
   }
+  .upgrades-grid { grid-template-columns: 1fr; }
   .container { padding-right: 0; }
-}
+} 
 
 .upgrade-box {
-  background: white;
-  padding: 15px;
+  background: rgba(255,255,255,0.03);
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .upgrade-box h3 {
-  font-size: 0.9rem;
-  color: #667eea;
-  margin-bottom: 8px;
+  font-size: 0.86rem;
+  color: #ffd700;
+  margin: 0;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
 }
+
+.upgrade-left { /* titre + meta */
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upgrade-meta {
+  font-size: 0.9rem;
+  color: #dbe7ff;
+}
+
+.upgrade-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.upgrade-btn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  font-weight: 700;
+  border-radius: 8px;
+  min-width: 68px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.upgrade-cost {
+  font-size: 0.9rem;
+  color: #cfd8e3;
+  margin: 0;
+}
+
 
 .le-rond {
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden; /* clip l'image pour qu'elle prenne exactement la forme du cercle */
+  display: inline-block; /* mieux adapté pour une image */
   cursor: pointer;
   transition: transform 0.1s, box-shadow 0.1s;
   box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-  font-weight: bold;
-  color: white;
-  font-size: 22px;
+}
+
+/* Assure que l'image prend exactement la taille du cercle */
+.le-rond img,
+.cookie-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* remplissage complet; change to 'contain' si tu veux voir toute l'image sans recadrage */
+  display: block;
 }
 
 .le-rond:hover {
@@ -219,7 +283,7 @@ button {
 
 #a1:hover, #a2:hover, #a3:hover, #a4:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 8px 20px rgba(241, 241, 241, 0.4);
 }
 
 #a1:disabled, #a2:disabled, #a3:disabled, #a4:disabled {
@@ -231,7 +295,18 @@ p {
   text-align: center;
   font-size: 1.1rem;
   font-weight: 500;
-  color: #555;
+  color: #cfd8e3; /* lighter on dark background */
+}
+
+.floating-text {
+    position: absolute;
+    pointer-events: none; /* Pour que le texte ne gêne pas les futurs clics */
+    color: #ffffff; /* visible on dark background */
+    font-weight: bold;
+    font-family: sans-serif;
+    animation: floatUp 0.8s ease-out forwards;
+    z-index: 1000;
+    font-size: 24px;
 }
 
 p span {
@@ -250,16 +325,7 @@ p span {
   flex: 1;
 }
 
-.floating-text {
-    position: absolute;
-    pointer-events: none; /* Pour que le texte ne gêne pas les futurs clics */
-    color: #000000; /* Choisis ta couleur */
-    font-weight: bold;
-    font-family: sans-serif;
-    animation: floatUp 0.8s ease-out forwards;
-    z-index: 1000;
-    font-size: 24px;
-}
+
 
 @keyframes floatUp {
     0% {
