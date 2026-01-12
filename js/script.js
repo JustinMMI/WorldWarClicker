@@ -1,8 +1,8 @@
 // déclaration des variables globales
-let click = 0;
-let clicksouris = 1;
-let money = 0;
-let gaina1 = 1;
+let click;
+let clicksouris;
+let money;
+let gaina1;
 
 // Base de données variables persistantes
 //
