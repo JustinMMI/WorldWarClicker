@@ -53,6 +53,96 @@ h1#money {
   padding: 20px;
   border-radius: 15px;
   border-left: 3px solid #667eea;
+
+  /* Fixe la section des améliorations sur la droite */
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+/* Petite ajustement pour éviter que le container chevauche la sidebar */
+.container {
+  padding-right: 360px; /* laisse de la place pour la sidebar */
+}
+
+/* Spécial : petites cases pour améliorations spéciales */
+.special-upgrades {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.special-upgrade {
+  position: relative;
+}
+
+.special-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: #333;
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(0,0,0,0.06);
+  cursor: pointer;
+}
+
+.special-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Tooltip visible au hover */
+.special-upgrade .tooltip {
+  display: none;
+  position: absolute;
+  right: 74px; /* s'affiche à gauche du petit carré */
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 220px;
+  background: rgba(20,20,20,0.95);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  text-align: left;
+  z-index: 100;
+}
+
+.special-upgrade:hover .tooltip,
+.special-btn:focus + .tooltip {
+  display: block;
+}
+
+.special-upgrade .tooltip strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #ffd700;
+}
+
+.reset-container {
+  margin-top: 8px;
+}
+
+/* Responsive: sur petits écrans, passer la sidebar en bas */
+@media (max-width: 700px) {
+  .upgrades-section {
+    position: static;
+    transform: none;
+    width: 100%;
+    max-height: none;
+  }
+  .container { padding-right: 0; }
 }
 
 .upgrade-box {
