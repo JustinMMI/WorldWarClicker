@@ -230,3 +230,40 @@ ameliorationMamie.addEventListener('click', () => {
     }
 });
 
+let resetButton = document.querySelector('#Reset');
+
+resetButton.addEventListener('click', () => {
+    if (!confirm('Voulez-vous vraiment réinitialiser la partie ?')) return;
+
+    // Supprime la sauvegarde
+    localStorage.removeItem(STORAGE_KEY);
+
+    // Réinitialise les variables globales
+    money = 0;
+    click = 0;
+    clicksouris = 1;
+    gaina1 = 1;
+
+    // Réinitialise les améliorations aux valeurs par défaut
+    ameliorations.forEach(a => {
+        if (a.id === 1) { a.nombre = 0; a.cout = 100; a.gain = gaina1; }
+        else if (a.id === 2) { a.nombre = 0; a.cout = 500; a.gain = 3; }
+        else if (a.id === 3) { a.nombre = 0; a.cout = 2000; a.gain = 10; }
+        else if (a.id === 4) { a.nombre = 0; a.cout = 15000; a.gain = 35; }
+    });
+
+    // Réinitialise les améliorations spéciales
+    cout_Al1 = 200;
+    affichage_cout_Al1.textContent = cout_Al1;
+    cout_Al2 = 2000;
+    affichage_cout_Al2.textContent = cout_Al2;
+
+    // Met à jour l'UI
+    affichage_money.textContent = money;
+    mettreAJourUIAmeliorations();
+    click = ameliorations.reduce((s, a) => s + a.nombre * a.gain, 0);
+    affichage_CPS.textContent = click;
+
+    // Sauvegarde l'état réinitialisé
+    saveGame();
+});
