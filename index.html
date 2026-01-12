@@ -10,12 +10,15 @@
 <body>
     <div class="container">
         <div class="game-section">
+            <div class="game-stats">
+                <h1 id="money">0</h1>
+                <p class="game-cps">CPS : <span id="CPST">0</span>/s</p>
+            </div>
             <img src="sources/assets/terre.png" alt="clicker" class="cookie-image le-rond" onclick="clicking()" onerror="console.warn('Image not found: Terre');">
         </div>
         
         <div class="upgrades-section">
-            <h1 id="money">0</h1>
-            <p>CPS : <span id="CPST">0</span>/s</p>
+            <!-- HUD déplacé dans la zone de jeu (au-dessus du cookie) -->
             
             <div class="upgrade-box">
                 <div class="upgrade-left">
@@ -79,6 +82,15 @@
                         <strong>Amélioration Mamie</strong>
                         <p>Les Mamies sont deux fois plus éfficaces</p>
                         <p>Coût : <span id="IDCoutAl2">2000</span></p>
+                    </div>
+                </div>
+
+                <div class="special-upgrade">
+                    <button id="Al3" class="special-btn">P</button>
+                    <div class="tooltip">
+                        <strong>Amélioration Papy</strong>
+                        <p>Les Papys doublent le gain de l'amélioration A2 (Papie)</p>
+                        <p>Coût : <span id="IDCoutAl3">20000</span></p>
                     </div>
                 </div>
 
