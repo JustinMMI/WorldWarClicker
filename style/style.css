@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+img {
+  -webkit-user-drag: none;
+  /* Chrome / Safari */
+  user-drag: none;
+  /* Standard (encore peu supporté, le webkit est important) */
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #071029 0%, #000000 100%); /* dark navy -> black */
